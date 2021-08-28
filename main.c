@@ -9,19 +9,9 @@ struct emp{
   char directivo;
 };
 
-void imprimir(struct emp e, int (*prima)(struct emp)){
-    if(prima(e) && e.numero)
-      printf("Numero: %i  Nombre: %s Numero de meses: %i directivo: %c\n", e.numero, e.nombre, e.meses_trabajo, e.directivo);
+void imprimir(struct emp e, const char *prima){
+      printf("Prima: %s Numero: %i  Nombre: %s Numero de meses: %i directivo: %c\n", prima, e.numero, e.nombre, e.meses_trabajo, e.directivo);
 }
-
-int P1(struct emp e){ if (e.meses_trabajo >= 12 && e.directivo == '+'){ 
-  printf("Prima: %s ", __FUNCTION__); return 1; }  return 0;};
-int P2(struct emp e){ if (e.meses_trabajo >= 12 && e.directivo == '-'){ 
-  printf("Prima: %s ", __FUNCTION__); return 1; }  return 0;};
-int P3(struct emp e){ if (e.meses_trabajo < 12 && e.directivo == '+'){ 
-  printf("Prima: %s ", __FUNCTION__); return 1; }  return 0;};
-int P4(struct emp e){ if (e.meses_trabajo < 12 && e.directivo == '-'){ 
-  printf("Prima: %s ", __FUNCTION__); return 1; }  return 0;};
 
 int main(int argc, char *argv[]){
   if(argc < 2)
@@ -39,10 +29,19 @@ int main(int argc, char *argv[]){
     e.meses_trabajo = atoi(tok);
     tok = strtok(NULL, ",");
     e.directivo = *tok;
-    imprimir(e, P1);
-    imprimir(e, P2);
-    imprimir(e, P3);
-    imprimir(e, P4);
+    if(!e.numero)
+      continue;
+    if(e.directivo == '+'){
+      if(e.meses_trabajo > 11)
+        imprimir(e, "P1");
+      else
+        imprimir(e, "P3");
+    }else{
+      if(e.meses_trabajo > 11)
+        imprimir(e, "P2");
+      else
+        imprimir(e, "P4");
+    }
   }
   fclose(file);
 }
